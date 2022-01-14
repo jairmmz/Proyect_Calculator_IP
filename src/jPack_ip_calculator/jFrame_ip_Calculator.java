@@ -35,7 +35,33 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     
-
+    void ClassDireccionIP(){
+        // Variable de condición para el primer valor de la dirección IP.
+        OneValue = Integer.parseInt(jTxt_InputOneValue.getText().toString());
+        
+        TwoValue = Integer.parseInt(jTxt_InputTwoValue.getText().toString());
+        ThreeValue = Integer.parseInt(jTxt_InputThreeValue.getText().toString());
+        FourValue = Integer.parseInt(jTxt_InputFourValue.getText().toString());
+        int value = 255;
+         
+        if(!(OneValue > value || TwoValue > value || ThreeValue > value || FourValue > value)){
+                if(OneValue >= 1 && OneValue <= 127){
+                    Class_A();
+                }else if(OneValue >= 128 && OneValue <= 191){
+                        Class_B();
+                        }else if(OneValue >= 192 && OneValue <= 223){
+                                Class_C();
+                            }else if(OneValue >= 224 && OneValue <= 239){
+                                JOptionPane.showMessageDialog(null, "Dirección IP Multicast", "Alerta", JOptionPane.WARNING_MESSAGE);
+                                }else if(OneValue >= 240 && OneValue <= 255){
+                                    JOptionPane.showMessageDialog(null, "Dirección IP Experimental", "Alerta", JOptionPane.WARNING_MESSAGE); 
+                                }else if(OneValue == 0){
+                                    JOptionPane.showMessageDialog(null, "No es una opción valida. Especifique un valor entre 1 a 223", "Alerta", JOptionPane.WARNING_MESSAGE); 
+                            }
+            }else{
+               JOptionPane.showMessageDialog(null, "Valor superado", "Alerta", JOptionPane.WARNING_MESSAGE); 
+            }  
+    }
     
     void CleanResult(){   
         jTxt_InputOneValue.setText("");
@@ -63,15 +89,19 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         ThreeValue = Integer.parseInt(jTxt_InputThreeValue.getText().toString());
         FourValue = Integer.parseInt(jTxt_InputFourValue.getText().toString());
         
-        jTxt_Class.setText("A");
-        jTxt_IP_red.setText(OneValue+".0.0.0");
-        jTxt_IP_host.setText(OneValue+"."+TwoValue+"."+ThreeValue+"."+FourValue);
-        jTxt_ID_red.setText(OneValue+".");
-        jTxt_ID_host.setText("."+TwoValue+"."+ThreeValue+"."+FourValue);
-        jTxt_IP_shell.setText("255.0.0.0");
-        jTxt_IP_broadcast.setText(OneValue+".255.255.255");
-        jTxt_Numb_IPs.setText("16.777.216");
-        jTxt_Num_IPs_conf.setText("16.777.214");   
+        if((TwoValue == 0 && ThreeValue == 0 && FourValue == 0) || (TwoValue == 255 && ThreeValue == 255 && FourValue == 255)){
+            JOptionPane.showMessageDialog(null, "Dirección IP no valida!", "Alerta", JOptionPane.WARNING_MESSAGE);
+        }else{
+            jTxt_Class.setText("A");
+            jTxt_IP_red.setText(OneValue+".0.0.0");
+            jTxt_IP_host.setText(OneValue+"."+TwoValue+"."+ThreeValue+"."+FourValue);
+            jTxt_ID_red.setText(OneValue+".");
+            jTxt_ID_host.setText("."+TwoValue+"."+ThreeValue+"."+FourValue);
+            jTxt_IP_shell.setText("255.0.0.0");
+            jTxt_IP_broadcast.setText(OneValue+".255.255.255");
+            jTxt_Numb_IPs.setText("16.777.216");
+            jTxt_Num_IPs_conf.setText("16.777.214");   
+        }
     }
     
     //Método para la clase B
@@ -81,17 +111,20 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         ThreeValue = Integer.parseInt(jTxt_InputThreeValue.getText().toString());
         FourValue = Integer.parseInt(jTxt_InputFourValue.getText().toString());
         
-        jTxt_Class.setText("B");
-        jTxt_IP_red.setText(OneValue+"."+TwoValue+".0.0");
-        jTxt_IP_host.setText(OneValue+"."+TwoValue+"."+ThreeValue+"."+FourValue);
-        jTxt_ID_red.setText(OneValue+"."+TwoValue+".");
-        jTxt_ID_host.setText("."+ThreeValue+"."+FourValue);
-        jTxt_IP_shell.setText("255.255.0.0");
-        jTxt_IP_broadcast.setText(OneValue+"."+TwoValue+".255.255");
-        jTxt_Numb_IPs.setText("65.536");
-        jTxt_Num_IPs_conf.setText("65.534");       
+        if((ThreeValue == 0 && FourValue == 0) || (ThreeValue == 255 && FourValue == 255)){
+            JOptionPane.showMessageDialog(null, "Dirección IP no valida!", "Alerta", JOptionPane.WARNING_MESSAGE);
+        }else{
+            jTxt_Class.setText("B");
+            jTxt_IP_red.setText(OneValue+"."+TwoValue+".0.0");
+            jTxt_IP_host.setText(OneValue+"."+TwoValue+"."+ThreeValue+"."+FourValue);
+            jTxt_ID_red.setText(OneValue+"."+TwoValue+".");
+            jTxt_ID_host.setText("."+ThreeValue+"."+FourValue);
+            jTxt_IP_shell.setText("255.255.0.0");
+            jTxt_IP_broadcast.setText(OneValue+"."+TwoValue+".255.255");
+            jTxt_Numb_IPs.setText("65.536");
+            jTxt_Num_IPs_conf.setText("65.534");     
+        }
     }
-    
     
     //Método para la clase C
     void Class_C(){
@@ -100,28 +133,47 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         ThreeValue = Integer.parseInt(jTxt_InputThreeValue.getText().toString());
         FourValue = Integer.parseInt(jTxt_InputFourValue.getText().toString());
         
-        jTxt_Class.setText("C");
-        jTxt_IP_red.setText(OneValue+"."+TwoValue+"."+ThreeValue+".0");
-        jTxt_IP_host.setText(OneValue+"."+TwoValue+"."+ThreeValue+"."+FourValue);
-        jTxt_ID_red.setText(OneValue+"."+TwoValue+"."+ThreeValue+".");
-        jTxt_ID_host.setText("."+FourValue);
-        jTxt_IP_shell.setText("255.255.255.0");
-        jTxt_IP_broadcast.setText(OneValue+"."+TwoValue+"."+ThreeValue+".255");
-        jTxt_Numb_IPs.setText("256");
-        jTxt_Num_IPs_conf.setText("254");        
-    }
-    
-    //Validación para la dirección IP.
-    public void verifInputNumber(KeyEvent evt){
-    char validar = evt.getKeyChar(); 
-        if(Character.isLetter(validar)){
-            getToolkit().beep();
-            evt.consume();
-            //JOptionPane.showMessageDialog(rootPane, "Igrese solo numeros");
+        if(FourValue == 0 || FourValue == 255){
+             JOptionPane.showMessageDialog(null, "Dirección IP no valida!", "Alerta", JOptionPane.WARNING_MESSAGE);
+        }else{
+            jTxt_Class.setText("C");
+            jTxt_IP_red.setText(OneValue+"."+TwoValue+"."+ThreeValue+".0");
+            jTxt_IP_host.setText(OneValue+"."+TwoValue+"."+ThreeValue+"."+FourValue);
+            jTxt_ID_red.setText(OneValue+"."+TwoValue+"."+ThreeValue+".");
+            jTxt_ID_host.setText("."+FourValue);
+            jTxt_IP_shell.setText("255.255.255.0");
+            jTxt_IP_broadcast.setText(OneValue+"."+TwoValue+"."+ThreeValue+".255");
+            jTxt_Numb_IPs.setText("256");
+            jTxt_Num_IPs_conf.setText("254");  
         }
     }
     
     
+    
+    //Validación para la dirección IP.
+    public void verifInputNumber(KeyEvent evt){
+    char validar = evt.getKeyChar(); 
+
+        if(Character.isLetter(validar)){
+            getToolkit().beep();
+            evt.consume();
+            //JOptionPane.showMessageDialog(rootPane, "Igrese solo numeros");
+        }        
+    }
+ 
+    void VerifiInputRange(){
+        OneValue = Integer.parseInt(jTxt_InputOneValue.getText().toString());
+        TwoValue = Integer.parseInt(jTxt_InputTwoValue.getText().toString());
+        ThreeValue = Integer.parseInt(jTxt_InputThreeValue.getText().toString());
+        FourValue = Integer.parseInt(jTxt_InputFourValue.getText().toString());
+        
+       if(OneValue > 255 || TwoValue > 255 || ThreeValue > 255 || FourValue > 255){
+           getToolkit().beep();
+           JOptionPane.showMessageDialog(null, "Rango superado");
+       }
+    }
+    
+
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -157,7 +209,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(204, 198, 235));
+        jPanel1.setBackground(new java.awt.Color(179, 165, 252));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("Calculadora IP");
@@ -167,6 +219,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         jLabel2.setText("Dirección IP:");
 
         jTxt_InputOneValue.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jTxt_InputOneValue.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         jTxt_InputOneValue.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTxt_InputOneValueKeyTyped(evt);
@@ -174,6 +227,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         });
 
         jTxt_InputTwoValue.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jTxt_InputTwoValue.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         jTxt_InputTwoValue.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTxt_InputTwoValueKeyTyped(evt);
@@ -181,6 +235,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         });
 
         jTxt_InputThreeValue.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jTxt_InputThreeValue.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         jTxt_InputThreeValue.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTxt_InputThreeValueKeyTyped(evt);
@@ -188,12 +243,14 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         });
 
         jTxt_InputFourValue.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jTxt_InputFourValue.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         jTxt_InputFourValue.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTxt_InputFourValueKeyTyped(evt);
             }
         });
 
+        jBttn_Calculate.setBackground(new java.awt.Color(23, 21, 23));
         jBttn_Calculate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jBttn_Calculate.setText("Calcular");
         jBttn_Calculate.addActionListener(new java.awt.event.ActionListener() {
@@ -201,6 +258,8 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
                 jBttn_CalculateActionPerformed(evt);
             }
         });
+
+        jPanel2.setBackground(new java.awt.Color(175, 221, 244));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setText("Clase:");
@@ -318,6 +377,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jBttn_Close.setBackground(new java.awt.Color(0, 0, 0));
         jBttn_Close.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jBttn_Close.setText("Salir");
         jBttn_Close.addActionListener(new java.awt.event.ActionListener() {
@@ -326,6 +386,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
             }
         });
 
+        jBttn_Clean_Field.setBackground(new java.awt.Color(0, 0, 0));
         jBttn_Clean_Field.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jBttn_Clean_Field.setText("Borrar");
         jBttn_Clean_Field.addActionListener(new java.awt.event.ActionListener() {
@@ -412,41 +473,19 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
     }//GEN-LAST:event_jBttn_Clean_FieldActionPerformed
 
     private void jBttn_CalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttn_CalculateActionPerformed
-        
-        // Variable de condición para el primer valor de la dirección IP.
-        OneValue = Integer.parseInt(jTxt_InputOneValue.getText().toString());
-        
-        TwoValue = Integer.parseInt(jTxt_InputTwoValue.getText().toString());
-        ThreeValue = Integer.parseInt(jTxt_InputThreeValue.getText().toString());
-        FourValue = Integer.parseInt(jTxt_InputFourValue.getText().toString());
-        
-        int value = 255;
 
-        if(!(OneValue > value || TwoValue > value || ThreeValue > value || FourValue > value)){
-            if(OneValue >= 1 && OneValue <= 127){
-                Class_A();
-            }else if(OneValue >= 128 && OneValue <= 191){
-                    Class_B();
-                    }else if(OneValue >= 192 && OneValue <= 223){
-                            Class_C();
-                        }else if(OneValue >= 224 && OneValue <= 239){
-                            JOptionPane.showMessageDialog(null, "Dirección IP Multicast", "Alerta", JOptionPane.WARNING_MESSAGE);
-                            }else if(OneValue >= 240 && OneValue <= 255){
-                                JOptionPane.showMessageDialog(null, "Dirección IP Experimental", "Alerta", JOptionPane.WARNING_MESSAGE); 
-                            }else if(OneValue == 0){
-                                JOptionPane.showMessageDialog(null, "No es una opción valida. Especifique un valor entre 1 a 223", "Alerta", JOptionPane.WARNING_MESSAGE); 
-                        }
-        }else{
-           JOptionPane.showMessageDialog(null, "Valor superado", "Alerta", JOptionPane.WARNING_MESSAGE); 
-        }
-
+            if(jTxt_InputOneValue.getText().isEmpty() || jTxt_InputTwoValue.getText().isEmpty() || jTxt_InputThreeValue.getText().isEmpty() || jTxt_InputFourValue.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "Llene todos los campos!");
+            }else{
+                ClassDireccionIP();
+          } 
     }//GEN-LAST:event_jBttn_CalculateActionPerformed
 
     private void jTxt_InputOneValueKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTxt_InputOneValueKeyTyped
-        verifInputNumber(evt);
+        verifInputNumber(evt);  
         if(jTxt_InputOneValue.getText().length() >= 3){
             evt.consume();
-        }         
+        }
     }//GEN-LAST:event_jTxt_InputOneValueKeyTyped
 
     private void jTxt_InputTwoValueKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTxt_InputTwoValueKeyTyped

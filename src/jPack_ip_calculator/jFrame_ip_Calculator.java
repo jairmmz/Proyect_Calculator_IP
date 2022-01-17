@@ -7,6 +7,9 @@ package jPack_ip_calculator;
 
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
 
 /**
  *
@@ -25,9 +28,31 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
      */
     public jFrame_ip_Calculator() {
         initComponents();
-
+        CenterWindows();
+        setIconImage(getIcoImage());
     }
-
+    
+    //Icono del programa.
+    public Image getIcoImage(){
+        Image retValue = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("img/icon_ip.png"));
+        return retValue;
+    }
+    
+    public void CenterWindows(){
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension frameSize = getSize();
+        
+        if(frameSize.height > screenSize.height){
+            frameSize.height = screenSize.height;
+        }
+        
+        if(frameSize.width > screenSize.width){
+            frameSize.width = screenSize.width;
+        }
+        
+        //Centrar ventana
+        setLocation((screenSize.width - frameSize.width)/2, (screenSize.height - frameSize.height)/2);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -52,14 +77,18 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
                         }else if(OneValue >= 192 && OneValue <= 223){
                                 Class_C();
                             }else if(OneValue >= 224 && OneValue <= 239){
+                                getToolkit().beep();
                                 JOptionPane.showMessageDialog(null, "Dirección IP Multicast", "Alerta", JOptionPane.WARNING_MESSAGE);
                                 }else if(OneValue >= 240 && OneValue <= 255){
+                                    getToolkit().beep();
                                     JOptionPane.showMessageDialog(null, "Dirección IP Experimental", "Alerta", JOptionPane.WARNING_MESSAGE); 
                                 }else if(OneValue == 0){
+                                    getToolkit().beep();
                                     JOptionPane.showMessageDialog(null, "No es una opción valida. Especifique un valor entre 1 a 223", "Alerta", JOptionPane.WARNING_MESSAGE); 
                             }
             }else{
-               JOptionPane.showMessageDialog(null, "Valor superado", "Alerta", JOptionPane.WARNING_MESSAGE); 
+                getToolkit().beep();
+                JOptionPane.showMessageDialog(null, "Valor superado", "Alerta", JOptionPane.WARNING_MESSAGE); 
             }  
     }
     
@@ -89,8 +118,12 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         ThreeValue = Integer.parseInt(jTxt_InputThreeValue.getText().toString());
         FourValue = Integer.parseInt(jTxt_InputFourValue.getText().toString());
         
-        if((TwoValue == 0 && ThreeValue == 0 && FourValue == 0) || (TwoValue == 255 && ThreeValue == 255 && FourValue == 255)){
-            JOptionPane.showMessageDialog(null, "Dirección IP no valida!", "Alerta", JOptionPane.WARNING_MESSAGE);
+        if(TwoValue == 0 && ThreeValue == 0 && FourValue == 0){
+            getToolkit().beep();
+            JOptionPane.showMessageDialog(null, "Dirección IP reservado para la IP de red!", "Alerta", JOptionPane.WARNING_MESSAGE);      
+        }else if(TwoValue == 255 && ThreeValue == 255 && FourValue == 255){
+            getToolkit().beep();
+            JOptionPane.showMessageDialog(null, "Dirección IP reservado para la IP de broadcast!", "Alerta", JOptionPane.WARNING_MESSAGE);
         }else{
             jTxt_Class.setText("A");
             jTxt_IP_red.setText(OneValue+".0.0.0");
@@ -111,8 +144,12 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         ThreeValue = Integer.parseInt(jTxt_InputThreeValue.getText().toString());
         FourValue = Integer.parseInt(jTxt_InputFourValue.getText().toString());
         
-        if((ThreeValue == 0 && FourValue == 0) || (ThreeValue == 255 && FourValue == 255)){
-            JOptionPane.showMessageDialog(null, "Dirección IP no valida!", "Alerta", JOptionPane.WARNING_MESSAGE);
+        if(ThreeValue == 0 && FourValue == 0){
+            getToolkit().beep();
+            JOptionPane.showMessageDialog(null, "Dirección IP reservado para la IP de red!", "Alerta", JOptionPane.WARNING_MESSAGE);               
+        }else if(ThreeValue == 255 && FourValue == 255){
+            getToolkit().beep();
+            JOptionPane.showMessageDialog(null, "Dirección IP reservado para la IP de broadcast!", "Alerta", JOptionPane.WARNING_MESSAGE);
         }else{
             jTxt_Class.setText("B");
             jTxt_IP_red.setText(OneValue+"."+TwoValue+".0.0");
@@ -133,8 +170,12 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         ThreeValue = Integer.parseInt(jTxt_InputThreeValue.getText().toString());
         FourValue = Integer.parseInt(jTxt_InputFourValue.getText().toString());
         
-        if(FourValue == 0 || FourValue == 255){
-             JOptionPane.showMessageDialog(null, "Dirección IP no valida!", "Alerta", JOptionPane.WARNING_MESSAGE);
+        if(FourValue == 0){
+            getToolkit().beep();
+            JOptionPane.showMessageDialog(null, "Dirección IP reservado para la IP de red!", "Alerta", JOptionPane.WARNING_MESSAGE);
+        }else if(FourValue == 255){
+            getToolkit().beep();
+            JOptionPane.showMessageDialog(null, "Dirección IP reservado para la IP de broadcast!", "Alerta", JOptionPane.WARNING_MESSAGE);
         }else{
             jTxt_Class.setText("C");
             jTxt_IP_red.setText(OneValue+"."+TwoValue+"."+ThreeValue+".0");
@@ -154,7 +195,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
     public void verifInputNumber(KeyEvent evt){
     char validar = evt.getKeyChar(); 
 
-        if(Character.isLetter(validar)){
+        if(Character.isLetter(validar) || (validar == '-' || validar == '+' || validar == ' ')){
             getToolkit().beep();
             evt.consume();
             //JOptionPane.showMessageDialog(rootPane, "Igrese solo numeros");
@@ -178,13 +219,6 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jTxt_InputOneValue = new javax.swing.JTextField();
-        jTxt_InputTwoValue = new javax.swing.JTextField();
-        jTxt_InputThreeValue = new javax.swing.JTextField();
-        jTxt_InputFourValue = new javax.swing.JTextField();
-        jBttn_Calculate = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -206,58 +240,20 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         jTxt_Num_IPs_conf = new javax.swing.JTextField();
         jBttn_Close = new javax.swing.JButton();
         jBttn_Clean_Field = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jTxt_InputOneValue = new javax.swing.JTextField();
+        jTxt_InputTwoValue = new javax.swing.JTextField();
+        jTxt_InputThreeValue = new javax.swing.JTextField();
+        jTxt_InputFourValue = new javax.swing.JTextField();
+        jBttn_Calculate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Calculadora IP");
+        setIconImage(getIconImage());
 
-        jPanel1.setBackground(new java.awt.Color(179, 165, 252));
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("Calculadora IP");
-        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel2.setText("Dirección IP:");
-
-        jTxt_InputOneValue.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTxt_InputOneValue.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
-        jTxt_InputOneValue.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTxt_InputOneValueKeyTyped(evt);
-            }
-        });
-
-        jTxt_InputTwoValue.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTxt_InputTwoValue.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
-        jTxt_InputTwoValue.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTxt_InputTwoValueKeyTyped(evt);
-            }
-        });
-
-        jTxt_InputThreeValue.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTxt_InputThreeValue.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
-        jTxt_InputThreeValue.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTxt_InputThreeValueKeyTyped(evt);
-            }
-        });
-
-        jTxt_InputFourValue.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTxt_InputFourValue.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
-        jTxt_InputFourValue.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTxt_InputFourValueKeyTyped(evt);
-            }
-        });
-
-        jBttn_Calculate.setBackground(new java.awt.Color(23, 21, 23));
-        jBttn_Calculate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jBttn_Calculate.setText("Calcular");
-        jBttn_Calculate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBttn_CalculateActionPerformed(evt);
-            }
-        });
+        jPanel1.setBackground(new java.awt.Color(51, 134, 255));
 
         jPanel2.setBackground(new java.awt.Color(175, 221, 244));
 
@@ -289,22 +285,31 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         jLabel11.setText("N° de IPs configurables:");
 
         jTxt_Class.setEditable(false);
+        jTxt_Class.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
         jTxt_IP_red.setEditable(false);
+        jTxt_IP_red.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
         jTxt_IP_host.setEditable(false);
+        jTxt_IP_host.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
         jTxt_ID_red.setEditable(false);
+        jTxt_ID_red.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
         jTxt_ID_host.setEditable(false);
+        jTxt_ID_host.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
         jTxt_IP_shell.setEditable(false);
+        jTxt_IP_shell.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
         jTxt_IP_broadcast.setEditable(false);
+        jTxt_IP_broadcast.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
         jTxt_Numb_IPs.setEditable(false);
+        jTxt_Numb_IPs.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
         jTxt_Num_IPs_conf.setEditable(false);
+        jTxt_Num_IPs_conf.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -377,7 +382,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jBttn_Close.setBackground(new java.awt.Color(0, 0, 0));
+        jBttn_Close.setBackground(new java.awt.Color(255, 0, 0));
         jBttn_Close.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jBttn_Close.setText("Salir");
         jBttn_Close.addActionListener(new java.awt.event.ActionListener() {
@@ -386,7 +391,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
             }
         });
 
-        jBttn_Clean_Field.setBackground(new java.awt.Color(0, 0, 0));
+        jBttn_Clean_Field.setBackground(new java.awt.Color(0, 255, 51));
         jBttn_Clean_Field.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jBttn_Clean_Field.setText("Borrar");
         jBttn_Clean_Field.addActionListener(new java.awt.event.ActionListener() {
@@ -394,6 +399,97 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
                 jBttn_Clean_FieldActionPerformed(evt);
             }
         });
+
+        jPanel3.setBackground(new java.awt.Color(51, 199, 255));
+
+        jLabel1.setBackground(new java.awt.Color(51, 134, 255));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Calculadora IP");
+        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setText("Dirección IP:");
+
+        jTxt_InputOneValue.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTxt_InputOneValue.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        jTxt_InputOneValue.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTxt_InputOneValueKeyTyped(evt);
+            }
+        });
+
+        jTxt_InputTwoValue.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTxt_InputTwoValue.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        jTxt_InputTwoValue.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTxt_InputTwoValueKeyTyped(evt);
+            }
+        });
+
+        jTxt_InputThreeValue.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTxt_InputThreeValue.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        jTxt_InputThreeValue.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTxt_InputThreeValueKeyTyped(evt);
+            }
+        });
+
+        jTxt_InputFourValue.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTxt_InputFourValue.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        jTxt_InputFourValue.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTxt_InputFourValueKeyTyped(evt);
+            }
+        });
+
+        jBttn_Calculate.setBackground(new java.awt.Color(255, 0, 0));
+        jBttn_Calculate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jBttn_Calculate.setText("Calcular");
+        jBttn_Calculate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBttn_CalculateActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTxt_InputOneValue, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTxt_InputTwoValue, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTxt_InputThreeValue, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTxt_InputFourValue, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addComponent(jBttn_Calculate, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(46, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(154, 154, 154))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jTxt_InputOneValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTxt_InputTwoValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTxt_InputThreeValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTxt_InputFourValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBttn_Calculate))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -408,51 +504,26 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
                         .addGap(244, 244, 244)
                         .addComponent(jBttn_Close)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
-                .addComponent(jTxt_InputOneValue, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTxt_InputTwoValue, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTxt_InputThreeValue, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTxt_InputFourValue, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(50, 50, 50)
-                        .addComponent(jBttn_Calculate, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTxt_InputOneValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTxt_InputTwoValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTxt_InputThreeValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTxt_InputFourValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBttn_Calculate))
-                .addGap(25, 25, 25)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBttn_Close)
                     .addComponent(jBttn_Clean_Field))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -474,15 +545,16 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
 
     private void jBttn_CalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBttn_CalculateActionPerformed
 
-            if(jTxt_InputOneValue.getText().isEmpty() || jTxt_InputTwoValue.getText().isEmpty() || jTxt_InputThreeValue.getText().isEmpty() || jTxt_InputFourValue.getText().isEmpty()){
-                JOptionPane.showMessageDialog(null, "Llene todos los campos!");
+            if(jTxt_InputOneValue.getText().trim().isEmpty() || jTxt_InputTwoValue.getText().trim().isEmpty() || jTxt_InputThreeValue.getText().trim().isEmpty() || jTxt_InputFourValue.getText().trim().isEmpty()){
+                getToolkit().beep();
+                JOptionPane.showMessageDialog(null, "Llene todos los campos!");      
             }else{
                 ClassDireccionIP();
           } 
     }//GEN-LAST:event_jBttn_CalculateActionPerformed
 
     private void jTxt_InputOneValueKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTxt_InputOneValueKeyTyped
-        verifInputNumber(evt);  
+        verifInputNumber(evt);
         if(jTxt_InputOneValue.getText().length() >= 3){
             evt.consume();
         }
@@ -561,6 +633,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JTextField jTxt_Class;
     private javax.swing.JTextField jTxt_ID_host;
     private javax.swing.JTextField jTxt_ID_red;

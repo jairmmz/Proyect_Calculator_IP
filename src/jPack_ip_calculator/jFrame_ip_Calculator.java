@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -17,12 +18,14 @@ import java.awt.Toolkit;
  */
 public class jFrame_ip_Calculator extends javax.swing.JFrame {
 
+    DefaultTableModel dtm = new DefaultTableModel();
+    
     int OneValue;
     int TwoValue;
     int ThreeValue;
     int FourValue;
     
-    
+    int inputMask;
     /**
      * Creates new form jFrame_ip_Calculator
      */
@@ -30,6 +33,16 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         initComponents();
         CenterWindows();
         setIconImage(getIcoImage());
+        
+        String title[] = {"N°","IP de sub red","Rango de IPs configurables","IP broadcast de la sub red"};
+        dtm.setColumnIdentifiers(title);
+        
+        jTable_subred.setModel(dtm);
+        jTable_subred.getColumnModel().getColumn(0).setMaxWidth(50);
+        jTable_subred.getColumnModel().getColumn(1).setMaxWidth(150);
+        jTable_subred.getColumnModel().getColumn(2).setMaxWidth(340);
+        jTable_subred.getColumnModel().getColumn(3).setMaxWidth(200);
+
     }
     
     //Icono del programa.
@@ -60,6 +73,24 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     
+    void CleanResult(){   
+        jTxt_InputOneValue.setText("");
+        jTxt_InputTwoValue.setText("");
+        jTxt_InputThreeValue.setText("");
+        jTxt_InputFourValue.setText("");
+
+        // Limpiar datos..
+        jTxt_Class.setText("");
+        jTxt_IP_red.setText("");
+        jTxt_IP_host.setText("");
+        jTxt_ID_red.setText("");
+        jTxt_ID_host.setText("");
+        jTxt_IP_shell.setText("");
+        jTxt_IP_broadcast.setText("");
+        jTxt_Numb_IPs.setText("");
+        jTxt_Num_IPs_conf.setText("");
+    }         
+            
     void ClassDireccionIP(){
         // Variable de condición para el primer valor de la dirección IP.
         OneValue = Integer.parseInt(jTxt_InputOneValue.getText().toString());
@@ -92,23 +123,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
             }  
     }
     
-    void CleanResult(){   
-        jTxt_InputOneValue.setText("");
-        jTxt_InputTwoValue.setText("");
-        jTxt_InputThreeValue.setText("");
-        jTxt_InputFourValue.setText("");
-
-        // Limpiar datos..
-        jTxt_Class.setText("");
-        jTxt_IP_red.setText("");
-        jTxt_IP_host.setText("");
-        jTxt_ID_red.setText("");
-        jTxt_ID_host.setText("");
-        jTxt_IP_shell.setText("");
-        jTxt_IP_broadcast.setText("");
-        jTxt_Numb_IPs.setText("");
-        jTxt_Num_IPs_conf.setText("");
-    }        
+       
             
     //Método para la clase A
     void Class_A(){
@@ -170,50 +185,110 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         ThreeValue = Integer.parseInt(jTxt_InputThreeValue.getText().toString());
         FourValue = Integer.parseInt(jTxt_InputFourValue.getText().toString());
         
+        inputMask = Integer.parseInt(jTxt_InputMask.getText().toString());
+        
         if(FourValue == 0){
             getToolkit().beep();
             JOptionPane.showMessageDialog(null, "Dirección IP reservado para la IP de red!", "Alerta", JOptionPane.WARNING_MESSAGE);
         }else if(FourValue == 255){
             getToolkit().beep();
             JOptionPane.showMessageDialog(null, "Dirección IP reservado para la IP de broadcast!", "Alerta", JOptionPane.WARNING_MESSAGE);
-        }else{
-            jTxt_Class.setText("C");
-            jTxt_IP_red.setText(OneValue+"."+TwoValue+"."+ThreeValue+".0");
-            jTxt_IP_host.setText(OneValue+"."+TwoValue+"."+ThreeValue+"."+FourValue);
-            jTxt_ID_red.setText(OneValue+"."+TwoValue+"."+ThreeValue+".");
-            jTxt_ID_host.setText("."+FourValue);
-            jTxt_IP_shell.setText("255.255.255.0");
-            jTxt_IP_broadcast.setText(OneValue+"."+TwoValue+"."+ThreeValue+".255");
-            jTxt_Numb_IPs.setText("256");
-            jTxt_Num_IPs_conf.setText("254");  
+        }else{          
+            if(inputMask != 24){
+                switch(inputMask){
+                        case 24:
+                                subRedTable(1,256);
+                                break;
+                        case 25:
+                                subRedTable(2,128);
+                                break;
+                        case 26:
+                                subRedTable(4,64);
+                                break;
+                        case 27:
+                                subRedTable(8,32);
+                                break;
+                        case 28:
+                                subRedTable(16,16);
+                                break;
+                        case 29:
+                                subRedTable(32,8);
+                                break;
+                        case 30:
+                                subRedTable(64,4);
+                                break;
+                        case 31:
+                                subRedTable(128,2);
+                                break;
+                        default:
+                                JOptionPane.showMessageDialog(null, "Valor ingresado excede");
+                                break;
+                }
+            }else{
+                jTxt_Class.setText("C");
+                jTxt_IP_red.setText(OneValue+"."+TwoValue+"."+ThreeValue+".0");
+                jTxt_IP_host.setText(OneValue+"."+TwoValue+"."+ThreeValue+"."+FourValue);
+                jTxt_ID_red.setText(OneValue+"."+TwoValue+"."+ThreeValue+".");
+                jTxt_ID_host.setText("."+FourValue);
+                jTxt_IP_shell.setText("255.255.255.0");
+                jTxt_IP_broadcast.setText(OneValue+"."+TwoValue+"."+ThreeValue+".255");
+                jTxt_Numb_IPs.setText("256");
+                jTxt_Num_IPs_conf.setText("254");  
+            }
+            
         }
     }
-    
-    
     
     //Validación para la dirección IP.
     public void verifInputNumber(KeyEvent evt){
     char validar = evt.getKeyChar(); 
 
-        if(Character.isLetter(validar) || (validar == '-' || validar == '+' || validar == ' ')){
+        if(Character.isLetter(validar) || (validar == '-' || validar == '+' || validar == ' ' || validar == '.')){
             getToolkit().beep();
             evt.consume();
             //JOptionPane.showMessageDialog(rootPane, "Igrese solo numeros");
         }        
     }
- 
-    void VerifiInputRange(){
+    
+    void CleanTable(){
+        dtm.setRowCount(0);
+    }
+    
+    void subRedTable(int totalSubnets, int numJumpSubnet){
+	CleanTable();
+        String date[] = new String[4];
+        
+        boolean isFirts = true;
+	int v1,v2,v3,v4;
+	int ipConfig = 0;
+
         OneValue = Integer.parseInt(jTxt_InputOneValue.getText().toString());
         TwoValue = Integer.parseInt(jTxt_InputTwoValue.getText().toString());
         ThreeValue = Integer.parseInt(jTxt_InputThreeValue.getText().toString());
         FourValue = Integer.parseInt(jTxt_InputFourValue.getText().toString());
-        
-       if(OneValue > 255 || TwoValue > 255 || ThreeValue > 255 || FourValue > 255){
-           getToolkit().beep();
-           JOptionPane.showMessageDialog(null, "Rango superado");
-       }
-    }
-    
+	
+	int valueFour = 0;
+	
+	//ipConfig = (pow(2,)) 
+	int contIPconfig = 1;
+	for(int i = 0; i < totalSubnets; i++){
+            //IP de la sub red.
+            date[0] = i+"";
+            date[1] = OneValue+"."+TwoValue+"."+ThreeValue+"."+valueFour;
+            valueFour += numJumpSubnet;
+            
+            //Rango de IPs configurables en la sub red.
+            date[2] = OneValue+"."+TwoValue+"."+ThreeValue+"."+contIPconfig+"-"+OneValue+"."+TwoValue+"."+ThreeValue+"."+(valueFour-2);
+            
+            //IPs de broadcast de la sub red.
+            date[3] = OneValue+"."+TwoValue+"."+ThreeValue+"."+(valueFour-1);
+            contIPconfig += numJumpSubnet;
+            
+            //Agregando en la tabla
+            dtm.addRow(date);
+	}
+
+}
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -238,8 +313,6 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         jTxt_IP_broadcast = new javax.swing.JTextField();
         jTxt_Numb_IPs = new javax.swing.JTextField();
         jTxt_Num_IPs_conf = new javax.swing.JTextField();
-        jBttn_Close = new javax.swing.JButton();
-        jBttn_Clean_Field = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -248,6 +321,13 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         jTxt_InputThreeValue = new javax.swing.JTextField();
         jTxt_InputFourValue = new javax.swing.JTextField();
         jBttn_Calculate = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        jTxt_InputMask = new javax.swing.JTextField();
+        jBttn_Clean_Field = new javax.swing.JButton();
+        jBttn_Close = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable_subred = new javax.swing.JTable();
+        jLabel13 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Calculadora IP");
@@ -327,7 +407,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTxt_Num_IPs_conf, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTxt_IP_broadcast, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -338,7 +418,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
                     .addComponent(jTxt_IP_red, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTxt_Class, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTxt_Numb_IPs, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(39, 39, 39))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -381,24 +461,6 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
                     .addComponent(jTxt_Num_IPs_conf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
-
-        jBttn_Close.setBackground(new java.awt.Color(255, 0, 0));
-        jBttn_Close.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jBttn_Close.setText("Salir");
-        jBttn_Close.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBttn_CloseActionPerformed(evt);
-            }
-        });
-
-        jBttn_Clean_Field.setBackground(new java.awt.Color(0, 255, 51));
-        jBttn_Clean_Field.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jBttn_Clean_Field.setText("Borrar");
-        jBttn_Clean_Field.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBttn_Clean_FieldActionPerformed(evt);
-            }
-        });
 
         jPanel3.setBackground(new java.awt.Color(51, 199, 255));
 
@@ -452,6 +514,35 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
             }
         });
 
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel12.setText("/");
+
+        jTxt_InputMask.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTxt_InputMask.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        jTxt_InputMask.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTxt_InputMaskKeyTyped(evt);
+            }
+        });
+
+        jBttn_Clean_Field.setBackground(new java.awt.Color(0, 255, 51));
+        jBttn_Clean_Field.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jBttn_Clean_Field.setText("Borrar");
+        jBttn_Clean_Field.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBttn_Clean_FieldActionPerformed(evt);
+            }
+        });
+
+        jBttn_Close.setBackground(new java.awt.Color(255, 0, 0));
+        jBttn_Close.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jBttn_Close.setText("Salir");
+        jBttn_Close.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBttn_CloseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -467,13 +558,21 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
                 .addComponent(jTxt_InputThreeValue, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTxt_InputFourValue, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTxt_InputMask, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jBttn_Calculate, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addGap(108, 108, 108)
+                .addComponent(jBttn_Clean_Field)
+                .addGap(29, 29, 29)
+                .addComponent(jBttn_Close)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(154, 154, 154))
+                .addGap(382, 382, 382))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -487,43 +586,70 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
                     .addComponent(jTxt_InputTwoValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTxt_InputThreeValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTxt_InputFourValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBttn_Calculate))
+                    .addComponent(jBttn_Calculate)
+                    .addComponent(jLabel12)
+                    .addComponent(jTxt_InputMask, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBttn_Clean_Field)
+                    .addComponent(jBttn_Close))
                 .addContainerGap())
         );
+
+        jTable_subred.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTable_subred.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jTable_subred.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(jTable_subred);
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel13.setText("Tabla de sub redes");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jBttn_Clean_Field)
-                        .addGap(244, 244, 244)
-                        .addComponent(jBttn_Close)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 610, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(20, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(219, 219, 219))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBttn_Close)
-                    .addComponent(jBttn_Clean_Field))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(13, 13, 13)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -581,6 +707,13 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTxt_InputFourValueKeyTyped
 
+    private void jTxt_InputMaskKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTxt_InputMaskKeyTyped
+        verifInputNumber(evt);
+        if(jTxt_InputMask.getText().length() >= 2){
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTxt_InputMaskKeyTyped
+
     /**
      * @param args the command line arguments
      */
@@ -623,6 +756,8 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -634,6 +769,8 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable_subred;
     private javax.swing.JTextField jTxt_Class;
     private javax.swing.JTextField jTxt_ID_host;
     private javax.swing.JTextField jTxt_ID_red;
@@ -642,6 +779,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
     private javax.swing.JTextField jTxt_IP_red;
     private javax.swing.JTextField jTxt_IP_shell;
     private javax.swing.JTextField jTxt_InputFourValue;
+    private javax.swing.JTextField jTxt_InputMask;
     private javax.swing.JTextField jTxt_InputOneValue;
     private javax.swing.JTextField jTxt_InputThreeValue;
     private javax.swing.JTextField jTxt_InputTwoValue;

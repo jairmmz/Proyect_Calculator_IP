@@ -25,7 +25,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
     int ThreeValue;
     int FourValue;
     
-    int inputMask;
+    int inputNumbSubnet;
     /**
      * Creates new form jFrame_ip_Calculator
      */
@@ -121,9 +121,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
                 getToolkit().beep();
                 JOptionPane.showMessageDialog(null, "Valor superado", "Alerta", JOptionPane.WARNING_MESSAGE); 
             }  
-    }
-    
-       
+    } 
             
     //Método para la clase A
     void Class_A(){
@@ -140,15 +138,21 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
             getToolkit().beep();
             JOptionPane.showMessageDialog(null, "Dirección IP reservado para la IP de broadcast!", "Alerta", JOptionPane.WARNING_MESSAGE);
         }else{
-            jTxt_Class.setText("A");
-            jTxt_IP_red.setText(OneValue+".0.0.0");
-            jTxt_IP_host.setText(OneValue+"."+TwoValue+"."+ThreeValue+"."+FourValue);
-            jTxt_ID_red.setText(OneValue+".");
-            jTxt_ID_host.setText("."+TwoValue+"."+ThreeValue+"."+FourValue);
-            jTxt_IP_shell.setText("255.0.0.0");
-            jTxt_IP_broadcast.setText(OneValue+".255.255.255");
-            jTxt_Numb_IPs.setText("16.777.216");
-            jTxt_Num_IPs_conf.setText("16.777.214");   
+            if(inputNumbSubnet != 16){
+                subRedTable('a');
+                //DESARROLLAR LA LOGICA PARA LA CONDICIÓN
+            }else{
+                jTxt_Class.setText("A");
+                jTxt_IP_red.setText(OneValue+".0.0.0");
+                jTxt_IP_host.setText(OneValue+"."+TwoValue+"."+ThreeValue+"."+FourValue);
+                jTxt_ID_red.setText(OneValue+".");
+                jTxt_ID_host.setText("."+TwoValue+"."+ThreeValue+"."+FourValue);
+                jTxt_IP_shell.setText("255.0.0.0");
+                jTxt_IP_broadcast.setText(OneValue+".255.255.255");
+                jTxt_Numb_IPs.setText("16.777.216");
+                jTxt_Num_IPs_conf.setText("16.777.214");   
+            }
+ 
         }
     }
     
@@ -159,6 +163,8 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         ThreeValue = Integer.parseInt(jTxt_InputThreeValue.getText().toString());
         FourValue = Integer.parseInt(jTxt_InputFourValue.getText().toString());
         
+        inputNumbSubnet = Integer.parseInt(jTxt_InputNumbSubnet.getText().toString());
+        
         if(ThreeValue == 0 && FourValue == 0){
             getToolkit().beep();
             JOptionPane.showMessageDialog(null, "Dirección IP reservado para la IP de red!", "Alerta", JOptionPane.WARNING_MESSAGE);               
@@ -166,15 +172,21 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
             getToolkit().beep();
             JOptionPane.showMessageDialog(null, "Dirección IP reservado para la IP de broadcast!", "Alerta", JOptionPane.WARNING_MESSAGE);
         }else{
-            jTxt_Class.setText("B");
-            jTxt_IP_red.setText(OneValue+"."+TwoValue+".0.0");
-            jTxt_IP_host.setText(OneValue+"."+TwoValue+"."+ThreeValue+"."+FourValue);
-            jTxt_ID_red.setText(OneValue+"."+TwoValue+".");
-            jTxt_ID_host.setText("."+ThreeValue+"."+FourValue);
-            jTxt_IP_shell.setText("255.255.0.0");
-            jTxt_IP_broadcast.setText(OneValue+"."+TwoValue+".255.255");
-            jTxt_Numb_IPs.setText("65.536");
-            jTxt_Num_IPs_conf.setText("65.534");     
+            if(inputNumbSubnet != 16){
+                subRedTable('b');
+                //DESARROLLAR LA LOGICA PARA LA CONDICIÓN
+            }else{
+                jTxt_Class.setText("B");
+                jTxt_IP_red.setText(OneValue+"."+TwoValue+".0.0");
+                jTxt_IP_host.setText(OneValue+"."+TwoValue+"."+ThreeValue+"."+FourValue);
+                jTxt_ID_red.setText(OneValue+"."+TwoValue+".");
+                jTxt_ID_host.setText("."+ThreeValue+"."+FourValue);
+                jTxt_IP_shell.setText("255.255.0.0");
+                jTxt_IP_broadcast.setText(OneValue+"."+TwoValue+".255.255");
+                jTxt_Numb_IPs.setText("65.536");
+                jTxt_Num_IPs_conf.setText("65.534");   
+            }
+    
         }
     }
     
@@ -185,7 +197,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         ThreeValue = Integer.parseInt(jTxt_InputThreeValue.getText().toString());
         FourValue = Integer.parseInt(jTxt_InputFourValue.getText().toString());
         
-        inputMask = Integer.parseInt(jTxt_InputMask.getText().toString());
+        inputNumbSubnet = Integer.parseInt(jTxt_InputNumbSubnet.getText().toString());
         
         if(FourValue == 0){
             getToolkit().beep();
@@ -194,36 +206,9 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
             getToolkit().beep();
             JOptionPane.showMessageDialog(null, "Dirección IP reservado para la IP de broadcast!", "Alerta", JOptionPane.WARNING_MESSAGE);
         }else{          
-            if(inputMask != 24){
-                switch(inputMask){
-                        case 24:
-                                subRedTable(1,256);
-                                break;
-                        case 25:
-                                subRedTable(2,128);
-                                break;
-                        case 26:
-                                subRedTable(4,64);
-                                break;
-                        case 27:
-                                subRedTable(8,32);
-                                break;
-                        case 28:
-                                subRedTable(16,16);
-                                break;
-                        case 29:
-                                subRedTable(32,8);
-                                break;
-                        case 30:
-                                subRedTable(64,4);
-                                break;
-                        case 31:
-                                subRedTable(128,2);
-                                break;
-                        default:
-                                JOptionPane.showMessageDialog(null, "Valor ingresado excede");
-                                break;
-                }
+            if(inputNumbSubnet != 24){
+                subRedTable('c');
+                //DESARROLLAR LA LOGICA PARA LA CONDICIÓN
             }else{
                 jTxt_Class.setText("C");
                 jTxt_IP_red.setText(OneValue+"."+TwoValue+"."+ThreeValue+".0");
@@ -254,41 +239,140 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         dtm.setRowCount(0);
     }
     
-    void subRedTable(int totalSubnets, int numJumpSubnet){
+    void calculateMask(int CalculateMask){
+	int resultCalculateMask = 0;
+	if( CalculateMask > 1 && CalculateMask <= 2){
+		resultCalculateMask = 128;		
+	}
+	if( CalculateMask >= 3 && CalculateMask <= 4){
+		resultCalculateMask = 192;		
+	}
+	if( CalculateMask >= 5 && CalculateMask <=8 ){
+		resultCalculateMask = 224;		
+	}
+	if( CalculateMask >= 9 && CalculateMask <= 16){
+		resultCalculateMask = 240;		
+	}
+	if( CalculateMask >= 17 && CalculateMask <= 32){
+		resultCalculateMask = 248;		
+	}
+	if( CalculateMask >= 33 && CalculateMask <= 64){
+		resultCalculateMask = 252;		
+	}
+	if( CalculateMask >= 65 && CalculateMask <= 128){
+		resultCalculateMask = 254;		
+	}
+	if( CalculateMask >= 129 && CalculateMask <= 256){
+		resultCalculateMask = 255;		
+	}
+    }
+    
+    void subRedTable(char classIP){
 	CleanTable();
         String date[] = new String[4];
-        
-        boolean isFirts = true;
-	int v1,v2,v3,v4;
-	int ipConfig = 0;
 
         OneValue = Integer.parseInt(jTxt_InputOneValue.getText().toString());
         TwoValue = Integer.parseInt(jTxt_InputTwoValue.getText().toString());
         ThreeValue = Integer.parseInt(jTxt_InputThreeValue.getText().toString());
         FourValue = Integer.parseInt(jTxt_InputFourValue.getText().toString());
 	
-	int valueFour = 0;
-	
-	//ipConfig = (pow(2,)) 
-	int contIPconfig = 1;
-	for(int i = 0; i < totalSubnets; i++){
-            //IP de la sub red.
-            date[0] = i+"";
-            date[1] = OneValue+"."+TwoValue+"."+ThreeValue+"."+valueFour;
-            valueFour += numJumpSubnet;
-            
-            //Rango de IPs configurables en la sub red.
-            date[2] = OneValue+"."+TwoValue+"."+ThreeValue+"."+contIPconfig+"-"+OneValue+"."+TwoValue+"."+ThreeValue+"."+(valueFour-2);
-            
-            //IPs de broadcast de la sub red.
-            date[3] = OneValue+"."+TwoValue+"."+ThreeValue+"."+(valueFour-1);
-            contIPconfig += numJumpSubnet;
-            
-            //Agregando en la tabla
-            dtm.addRow(date);
-	}
+        inputNumbSubnet = Integer.parseInt(jTxt_InputNumbSubnet.getText().toString());     
+        
+        int totalSubnets = 0;		// pow(2,i) -> Total de subredes
+        int totalSubnetsConfig = 0; // (pow(2,i)-2) -> Total de subredes configurables;
 
-}
+        int totalHostSubnets = 0;	// pow(2,8 - bits utilizados) -> Total de IPs para cada subred	
+        int totalHostConfig = 0; 	// (pow(2,8 - bits utilizados)-2) -> Total de IPs configurables para cada subred;
+
+        for(int i = 1; i < 9; i++){
+            totalSubnetsConfig =  ((int)Math.pow(2, i)-2); //(pow(2,i)-2);	
+            if(inputNumbSubnet <= totalSubnetsConfig){
+                totalSubnets =  (int) Math.pow(2, i); //pow(2,i);
+                totalSubnetsConfig =  ((int)Math.pow(2, i)-2); //(pow(2,i)-2);
+                totalHostSubnets = (int) Math.pow(2, 8-i);  //pow(2,8-i);
+                totalHostConfig =  ((int) Math.pow(2, i)-2); //(pow(2,8-i)-2);
+                break;
+            }
+        }
+
+        if(classIP == 'a' || classIP == 'A'){
+            // subredes para la clase a
+            int valueTwoSubnet = 0;
+            int valueTwoRange = 0;
+
+            for(int i = 0; i < totalSubnets; i++){
+                // IP de subred.
+                date[0] = i +"";
+                date[1] = OneValue+"."+valueTwoSubnet+"."+0+"."+0;
+                valueTwoSubnet += totalHostSubnets;
+
+                // Rango de IPs de la subred configurables.
+                date[2] = OneValue+"."+valueTwoRange+"."+0+"."+1+" - "+OneValue+"."+(valueTwoSubnet-1)+"."+255+"."+254;
+
+                // IP broadcast de la subred
+                date[3] = OneValue+"."+(valueTwoSubnet-1)+"."+255+"."+255;
+
+                // Contador IP de Primer valor.
+                valueTwoRange += totalHostSubnets;	
+                
+                // Agregando a la tabla.
+                dtm.addRow(date);
+            }
+            //calculateMask(totalSubnets);		
+        }
+
+        if(classIP == 'b' || classIP == 'B'){
+                // subredes para la clase b
+                int valueThreeSubnet = 0;
+                int valueThreeRange = 0;
+
+                for(int i = 0; i < totalSubnets; i++){
+                        // IP de subred.
+                        date[0] = i+"";
+                        date[1] = OneValue+"."+TwoValue+"."+valueThreeSubnet+"."+0;
+                        valueThreeSubnet += totalHostSubnets;
+
+                        // Rango de IPs de la subred configurables.
+                        date[2] = OneValue+"."+TwoValue+"."+valueThreeRange+"."+1+" - "+OneValue+"."+TwoValue+"."+(valueThreeSubnet-1)+"."+254;
+
+                        // IP broadcast de la subred
+                        date[3] = OneValue+"."+TwoValue+"."+(valueThreeSubnet-1)+"."+255;
+
+                        // Contador IP de Primer valor.
+                        valueThreeRange += totalHostSubnets;	
+                        
+                        // Agregando a la tabla.
+                        dtm.addRow(date);
+                }	
+                //calculateMask(totalSubnets);
+        }
+
+        if(classIP == 'c' || classIP == 'C'){
+                int valueFourSubnet = 0;
+                int valueFourRange = 1;
+
+                for(int i = 0; i < totalSubnets; i++){
+                        // IP de subred.
+                        date[0] = i+"";
+                        date[1] = OneValue+"."+TwoValue+"."+ThreeValue+"."+valueFourSubnet;
+                        valueFourSubnet += totalHostSubnets;
+
+                        // Rango de IPs de la subred configurables.
+                        date[2] = OneValue+"."+TwoValue+"."+ThreeValue+"."+valueFourRange+" - "+OneValue+"."+TwoValue+"."+ThreeValue+"."+(valueFourSubnet-2);
+
+                        // IP broadcast de la subred
+                        date[3] = OneValue+"."+TwoValue+"."+ThreeValue+"."+(valueFourSubnet-1);
+
+                        // Contador IP de Primer valor.
+                        valueFourRange += totalHostSubnets;	
+                        
+                        // Agregando a la tabla.
+                        dtm.addRow(date);
+                }
+                //calculateMask(totalSubnets);		
+        }  
+        
+    }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -322,7 +406,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         jTxt_InputFourValue = new javax.swing.JTextField();
         jBttn_Calculate = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
-        jTxt_InputMask = new javax.swing.JTextField();
+        jTxt_InputNumbSubnet = new javax.swing.JTextField();
         jBttn_Clean_Field = new javax.swing.JButton();
         jBttn_Close = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -514,14 +598,14 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
             }
         });
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel12.setText("/");
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel12.setText("N° de subredes");
 
-        jTxt_InputMask.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTxt_InputMask.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
-        jTxt_InputMask.addKeyListener(new java.awt.event.KeyAdapter() {
+        jTxt_InputNumbSubnet.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTxt_InputNumbSubnet.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        jTxt_InputNumbSubnet.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTxt_InputMaskKeyTyped(evt);
+                jTxt_InputNumbSubnetKeyTyped(evt);
             }
         });
 
@@ -558,17 +642,17 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
                 .addComponent(jTxt_InputThreeValue, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTxt_InputFourValue, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel12)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTxt_InputMask, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jBttn_Calculate, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(108, 108, 108)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTxt_InputNumbSubnet, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(64, 64, 64)
+                .addComponent(jBttn_Calculate, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(79, 79, 79)
                 .addComponent(jBttn_Clean_Field)
-                .addGap(29, 29, 29)
+                .addGap(34, 34, 34)
                 .addComponent(jBttn_Close)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(39, 39, 39))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -588,7 +672,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
                     .addComponent(jTxt_InputFourValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBttn_Calculate)
                     .addComponent(jLabel12)
-                    .addComponent(jTxt_InputMask, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTxt_InputNumbSubnet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBttn_Clean_Field)
                     .addComponent(jBttn_Close))
                 .addContainerGap())
@@ -625,7 +709,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(13, 13, 13)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 610, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(20, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -707,12 +791,12 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTxt_InputFourValueKeyTyped
 
-    private void jTxt_InputMaskKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTxt_InputMaskKeyTyped
+    private void jTxt_InputNumbSubnetKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTxt_InputNumbSubnetKeyTyped
         verifInputNumber(evt);
-        if(jTxt_InputMask.getText().length() >= 2){
+        if(jTxt_InputNumbSubnet.getText().length() >= 2){
             evt.consume();
         }
-    }//GEN-LAST:event_jTxt_InputMaskKeyTyped
+    }//GEN-LAST:event_jTxt_InputNumbSubnetKeyTyped
 
     /**
      * @param args the command line arguments
@@ -779,7 +863,7 @@ public class jFrame_ip_Calculator extends javax.swing.JFrame {
     private javax.swing.JTextField jTxt_IP_red;
     private javax.swing.JTextField jTxt_IP_shell;
     private javax.swing.JTextField jTxt_InputFourValue;
-    private javax.swing.JTextField jTxt_InputMask;
+    private javax.swing.JTextField jTxt_InputNumbSubnet;
     private javax.swing.JTextField jTxt_InputOneValue;
     private javax.swing.JTextField jTxt_InputThreeValue;
     private javax.swing.JTextField jTxt_InputTwoValue;
